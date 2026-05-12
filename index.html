@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biblioteca Yuri ✿</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-50: #FDF0F5;
+      --pink-100: #F9D4E4;
+      --pink-200: #F2A8C8;
+      --pink-400: #D4537E;
+      --pink-600: #993556;
+      --pink-800: #5C1830;
+      --cream: #FAF7F4;
+      --text: #2a1a1f;
+      --text-muted: #7a5a64;
+      --border: rgba(180, 80, 110, 0.15);
+      --border-hover: rgba(180, 80, 110, 0.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--pink-800);
+      padding: 3rem 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾';
+      position: absolute;
+      top: 12px; left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,0.15);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾ ✿ ✾';
+      position: absolute;
+      bottom: 12px; left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,0.15);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--pink-200);
+    }
+    .hero p {
+      margin-top: 0.75rem;
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 9px 12px 9px 36px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-wrap input:focus { border-color: var(--pink-400); }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: var(--pink-800);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-add:hover { background: var(--pink-600); }
+
+    /* ── GENRE FILTERS ── */
+    .filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .filter-btn {
+      padding: 5px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--pink-400); color: var(--pink-600); }
+    .filter-btn.active {
+      background: var(--pink-800);
+      border-color: var(--pink-800);
+      color: #fff;
+    }
+
+    .results-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      animation: fadeUp 0.35s ease both;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(92,24,48,0.1);
+      border-color: var(--pink-200);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(160deg, var(--pink-50) 0%, var(--pink-100) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-cover-placeholder {
+      font-size: 3rem;
+      opacity: 0.35;
+      user-select: none;
+    }
+
+    .card-body { padding: 12px 14px 14px; }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 9px;
+    }
+    .tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--pink-50);
+      color: var(--pink-600);
+      border: 1px solid var(--pink-100);
+      font-weight: 500;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+    }
+    .empty .emoji { font-size: 3rem; margin-bottom: 1rem; }
+    .empty p { font-size: 15px; }
+
+    /* ── MODAL BASE ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(42,26,31,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .overlay.open { display: flex; }
+
+    /* ── DETAIL MODAL ── */
+    .detail-modal {
+      background: #fff;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: scaleIn 0.2s ease;
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .detail-top {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+    .detail-cover {
+      width: 130px;
+      flex-shrink: 0;
+      aspect-ratio: 2/3;
+      border-radius: 10px;
+      background: linear-gradient(160deg, var(--pink-50) 0%, var(--pink-100) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .detail-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .detail-cover-placeholder { font-size: 2.5rem; opacity: 0.35; }
+    .detail-info { flex: 1; }
+    .detail-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .detail-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+    .detail-footer {
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-close {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-close:hover { background: var(--pink-50); border-color: var(--pink-200); color: var(--pink-600); }
+
+    /* ── FORM MODAL ── */
+    .form-modal {
+      background: #fff;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      animation: scaleIn 0.2s ease;
+    }
+    .form-modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--cream);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--pink-400); background: #fff; }
+    .form-group textarea { height: 90px; resize: vertical; }
+    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .form-actions { display: flex; gap: 8px; margin-top: 6px; }
+    .btn-save {
+      flex: 1;
+      padding: 10px;
+      background: var(--pink-800);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-save:hover { background: var(--pink-600); }
+    .btn-cancel {
+      padding: 10px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .btn-cancel:hover { background: var(--pink-50); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 480px) {
+      .detail-top { flex-direction: column; }
+      .detail-cover { width: 100%; aspect-ratio: 3/2; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Biblioteca <em>Yuri</em> ✿</h1>
+    <p>Recomendaciones del grupo · Mangas para explorar y descubrir</p>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Buscar por título, descripción o género..." oninput="render()" />
+    </div>
+    <button class="btn-add" onclick="openForm()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Agregar manga
+    </button>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <p class="results-count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  ✿ &nbsp; Hecho con amor por fans del género yuri &nbsp; ✿
+</footer>
+
+<!-- ══ DETAIL MODAL ══ -->
+<div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-modal" id="detailContent"></div>
+</div>
+
+<!-- ══ FORM MODAL ══ -->
+<div class="overlay" id="formOverlay" onclick="closeFormOverlay(event)">
+  <div class="form-modal">
+    <h2>Agregar manga ✿</h2>
+    <div class="form-group">
+      <label>Título *</label>
+      <input type="text" id="fTitle" placeholder="Nombre del manga" />
+    </div>
+    <div class="form-group">
+      <label>URL de portada</label>
+      <input type="text" id="fCover" placeholder="https://..." />
+      <p class="form-hint">Opcional — pega el enlace directo a la imagen de portada</p>
+    </div>
+    <div class="form-group">
+      <label>Descripción *</label>
+      <textarea id="fDesc" placeholder="¿De qué trata el manga?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Géneros</label>
+      <input type="text" id="fTags" placeholder="Romance, Drama, Escolar..." />
+      <p class="form-hint">Separa los géneros con comas</p>
+    </div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="addManga()">Guardar</button>
+      <button class="btn-cancel" onclick="document.getElementById('formOverlay').classList.remove('open')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ══════════════════════════════════════════
+     DATOS — Para agregar mangas permanentes,
+     edita este array directamente aquí.
+     Cada entrada tiene:
+       id       → número único
+       title    → título del manga
+       cover    → URL de portada (o "" para dejar vacío)
+       desc     → descripción
+       tags     → array de géneros
+  ══════════════════════════════════════════ */
+  let mangas = [
+    {
+      id: 1,
+      title: "Citrus",
+      cover: "",
+      desc: "Yuzu, una chica fashionista, se transfiere a una estricta escuela privada donde conoce a su nueva hermanastra Mei, fría y severa. Entre sus choques de personalidad nace una relación llena de tensión y sentimientos inesperados.",
+      tags: ["Romance", "Drama", "Escolar"]
+    },
+    {
+      id: 2,
+      title: "Bloom Into You",
+      cover: "",
+      desc: "Yuu siempre soñó con sentir ese amor arrollador del que cantan las canciones, pero nunca lo ha sentido. Todo cambia cuando Touko, la perfecta presidenta del consejo estudiantil, se enamora de ella.",
+      tags: ["Romance", "Slice of Life", "Escolar"]
+    },
+    {
+      id: 3,
+      title: "Whisper Me a Love Song",
+      cover: "",
+      desc: "Himari se enamora a primera vista de Yori, la vocalista de una banda escolar, creyendo que sus palabras de 'te amo' son una confesión real. Un dulce malentendido que se convierte en una tierna historia de amor.",
+      tags: ["Romance", "Comedia", "Escolar"]
+    },
+    {
+      id: 4,
+      title: "Sweet Blue Flowers",
+      cover: "",
+      desc: "Fumi y Akira se reencuentran después de años separadas al entrar a preparatorias cercanas. Mientras Fumi navega su primera relación lésbica, ambas redescubren su amistad y sus propios sentimientos.",
+      tags: ["Romance", "Drama", "Slice of Life"]
+    }
+  ];
+
+  /* ══ Estado ══ */
+  let activeTag = null;
+
+  /* ══ Tags únicos ══ */
+  function allTags() {
+    const s = new Set();
+    mangas.forEach(m => m.tags.forEach(t => s.add(t)));
+    return [...s].sort();
+  }
+
+  /* ══ Renderizar ══ */
+  function render() {
+    const q = (document.getElementById("search").value || "").toLowerCase();
+
+    const filtered = mangas.filter(m => {
+      const matchQ = !q ||
+        m.title.toLowerCase().includes(q) ||
+        m.desc.toLowerCase().includes(q) ||
+        m.tags.some(t => t.toLowerCase().includes(q));
+      const matchTag = !activeTag || m.tags.includes(activeTag);
+      return matchQ && matchTag;
+    });
+
+    /* Filtros */
+    const tags = allTags();
+    document.getElementById("filters").innerHTML =
+      tags.map(t =>
+        `<button class="filter-btn${activeTag === t ? ' active' : ''}" onclick="toggleTag('${t}')">${t}</button>`
+      ).join('');
+
+    /* Conteo */
+    const countEl = document.getElementById("count");
+    countEl.textContent = filtered.length === mangas.length
+      ? `${mangas.length} manga${mangas.length !== 1 ? 's' : ''} en la biblioteca`
+      : `${filtered.length} de ${mangas.length} mangas`;
+
+    /* Grid */
+    const grid = document.getElementById("grid");
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty">
+        <div class="emoji">✿</div>
+        <p>No se encontraron mangas con ese criterio.</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map((m, i) => `
+      <div class="card" onclick="openDetail(${m.id})" style="animation-delay:${i * 40}ms">
+        <div class="card-cover">
+          ${m.cover
+            ? `<img src="${m.cover}" alt="${m.title}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-cover-placeholder',textContent:'✿'}))" />`
+            : `<div class="card-cover-placeholder">✿</div>`}
+        </div>
+        <div class="card-body">
+          <div class="card-title">${m.title}</div>
+          <div class="card-desc">${m.desc}</div>
+          <div class="tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleTag(t) {
+    activeTag = activeTag === t ? null : t;
+    render();
+  }
+
+  /* ══ Modal detalle ══ */
+  function openDetail(id) {
+    const m = mangas.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById("detailContent").innerHTML = `
+      <div class="detail-top">
+        <div class="detail-cover">
+          ${m.cover
+            ? `<img src="${m.cover}" alt="${m.title}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'detail-cover-placeholder',textContent:'✿'}))" />`
+            : `<div class="detail-cover-placeholder">✿</div>`}
+        </div>
+        <div class="detail-info">
+          <div class="detail-title">${m.title}</div>
+          <div class="detail-desc">${m.desc}</div>
+          <div class="tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="detail-footer">
+        <button class="btn-close" onclick="document.getElementById('detailOverlay').classList.remove('open')">Cerrar</button>
+      </div>
+    `;
+    document.getElementById("detailOverlay").classList.add("open");
+  }
+
+  function closeDetail(e) {
+    if (e.target.id === "detailOverlay")
+      document.getElementById("detailOverlay").classList.remove("open");
+  }
+
+  /* ══ Modal formulario ══ */
+  function openForm() {
+    ["fTitle","fCover","fDesc","fTags"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("formOverlay").classList.add("open");
+  }
+
+  function closeFormOverlay(e) {
+    if (e.target.id === "formOverlay")
+      document.getElementById("formOverlay").classList.remove("open");
+  }
+
+  function addManga() {
+    const title = document.getElementById("fTitle").value.trim();
+    const cover = document.getElementById("fCover").value.trim();
+    const desc  = document.getElementById("fDesc").value.trim();
+    const tags  = document.getElementById("fTags").value
+                    .split(",").map(t => t.trim()).filter(Boolean);
+
+    if (!title) { alert("El título es obligatorio."); return; }
+    if (!desc)  { alert("La descripción es obligatoria."); return; }
+
+    mangas.unshift({ id: Date.now(), title, cover, desc, tags });
+    document.getElementById("formOverlay").classList.remove("open");
+    render();
+  }
+
+  /* ══ Init ══ */
+  render();
+</script>
+</body>
+</html>
